@@ -1,9 +1,9 @@
 variable "users" {
-    default = {
-                renato:"BR", 
-                seiji:"JP", 
-                terraform:"ES"
-              }
+  default = {
+    renato : { country : "BR", department : "ABC" },
+    seiji : { country : "JP", department : "DEF" },
+    terraform : { country : "ES", department : "XYZ" }
+  }
 }
 
 terraform {
@@ -21,8 +21,9 @@ provider "aws" {
 
 resource "aws_iam_user" "my_iam_user" {
   for_each = var.users
-  name = each.key
+  name     = each.key
   tags = {
-    country: each.value
+    country : each.value.country
+    department : each.value.department
   }
 }

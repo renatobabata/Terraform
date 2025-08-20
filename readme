@@ -1,0 +1,30 @@
+Terraform commands
+
+1. brew install terraform
+2. terraform --version
+3. terraform version
+4. terraform init
+5. export AWS_ACCESS_KEY_ID=*******
+6. export AWS_SECRET_ACCESS_KEY=*********
+7. terraform plan
+8. terraform console
+9. terraform apply -refresh=false
+10. terraform plan -out iam.tfplan
+11. terraform apply "iam.tfplan"
+12. terraform apply -target=aws_iam_user.my_iam_user
+13. terraform destroy
+14. terraform validate
+15. terraform fmt
+16. terraform show
+17. export TF_VAR_iam_user_name_prefix = FROM_ENV_VARIABLE_IAM_PREFIX
+18. export TF_VAR_iam_user_name_prefix=FROM_ENV_VARIABLE_IAM_PREFIX
+19. terraform plan -refresh=false -var="iam_user_name_prefix=VALUE_FROM_COMMAND_LINE"
+20. terraform apply -target=aws_default_vpc.default
+21. terraform apply -target=data.aws_subnet_ids.default_subnets
+22. terraform apply -target=data.aws_ami_ids.aws_linux_2_latest_ids
+23. terraform apply -target=data.aws_ami.aws_linux_2_latest
+24. terraform workspace show
+25. terraform workspace new prod-env
+26. terraform workspace select default
+27. terraform workspace list
+terraform workspace select prod-env

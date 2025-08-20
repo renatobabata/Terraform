@@ -43,3 +43,13 @@ resource "aws_security_group" "http_server_sg" {
     name = "http_server_sg"
   }
 }
+
+//Create an EC2 instance - http server
+
+resource "aws_instance" "http_server" {
+  ami                    = "ami-0de716d6197524dd9"                // amazon machine image
+  key_name               = "default-ec2"                          //key pair 
+  instance_type          = "t2.micro"                             //hardware
+  vpc_security_group_ids = [aws_security_group.http_server_sg.id] //security_group
+  subnet_id              = "subnet-0addca6a1ebc33a46"             //what subnet this should be created in
+}

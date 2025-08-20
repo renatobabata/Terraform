@@ -15,12 +15,18 @@ provider "aws" {
   region = "us-east-1"
 }
 
+# https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/default_vpc
+resource "aws_default_vpc" "default" {
+
+}
+
 //HTTP Server -> SG
 //Security Group for 80 TCP, 22 TCP, CIDR (to specify the range of IP) ["0.0.0.0/0"]
 //https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
 resource "aws_security_group" "http_server_sg" {
   name   = "http_server_sg"
-  vpc_id = "vpc-0fdc2036e884187e5"
+  #vpc_id = "vpc-0fdc2036e884187e5"
+  vpc_id = aws_default_vpc.default.id
   ingress {
     from_port   = 80
     to_port     = 80
@@ -59,7 +65,7 @@ resource "aws_instance" "http_server" {
   # to connect to EC2 instance
   connection {
     type        = "ssh"
-    host        = self
+    host        = self.public_ip
     user        = "ec2-user"
     private_key = file(var.aws_key_pair)
   }

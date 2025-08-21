@@ -20,12 +20,38 @@ resource "aws_default_vpc" "default" {
 
 }
 
+# data provider subnets
 data "aws_subnets" "default_subnets" {
   filter {
     name   = "vpc-id"
     values = [aws_default_vpc.default.id]
   }
 }
+
+# data provider AMI 
+data "aws_ami" "aws_linux_2_latest" {
+  most_recent = true
+  owners = ["amazon"]
+  filter {
+    name = "name"
+    values = ["amzn2-ami-hvm-*"]   
+  }
+}
+
+data "aws_ami_ids" "aws_linux_2_latest_ids" {
+  owners = ["amazon"]
+}
+
+#filter {
+#name = "name"
+#values = ["amzn2-ami-kernel-5.10-hvm*"]
+#}
+ 
+#filter {
+#name = "architecture"
+#values = ["x86_64"]
+#}
+
 
 //HTTP Server -> SG
 //Security Group for 80 TCP, 22 TCP, CIDR (to specify the range of IP) ["0.0.0.0/0"]
@@ -63,7 +89,8 @@ resource "aws_security_group" "http_server_sg" {
 
 #Create an EC2 instance - http server
 resource "aws_instance" "http_server" {
-  ami                    = "ami-0de716d6197524dd9"                # amazon machine image
+  #ami                    = "ami-0de716d6197524dd9"                # amazon machine image
+  ami                    = data.aws_ami.aws_linux_2_latest.id 
   key_name               = "default-ec2"                          # key pair 
   instance_type          = "t2.micro"                             # hardware
   vpc_security_group_ids = [aws_security_group.http_server_sg.id] # security_group

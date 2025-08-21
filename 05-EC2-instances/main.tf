@@ -20,11 +20,18 @@ resource "aws_default_vpc" "default" {
 
 }
 
+data "aws_subnets" "default_subnets" {
+  filter {
+    name   = "vpc-id"
+    values = [aws_default_vpc.default.id]
+  }
+}
+
 //HTTP Server -> SG
 //Security Group for 80 TCP, 22 TCP, CIDR (to specify the range of IP) ["0.0.0.0/0"]
 //https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/security_group
 resource "aws_security_group" "http_server_sg" {
-  name   = "http_server_sg"
+  name = "http_server_sg"
   #vpc_id = "vpc-0fdc2036e884187e5"
   vpc_id = aws_default_vpc.default.id
   ingress {
@@ -60,7 +67,8 @@ resource "aws_instance" "http_server" {
   key_name               = "default-ec2"                          # key pair 
   instance_type          = "t2.micro"                             # hardware
   vpc_security_group_ids = [aws_security_group.http_server_sg.id] # security_group
-  subnet_id              = "subnet-0addca6a1ebc33a46"             # what subnet this should be created in
+  #subnet_id              = "subnet-0addca6a1ebc33a46"             # what subnet this should be created in
+  subnet_id              = tolist(data.aws_subnets.default_subnets.ids)[0]
 
   # to connect to EC2 instance
   connection {

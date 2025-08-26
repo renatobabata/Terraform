@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "my_s3_bucket"{
 }
 
 resource "aws_iam_user" "my_iam_user" {
-    name = "my_iam_user_updated"
+name = "${terraform.workspace}_my_iam_user_updated"
 }
 
 resource "aws_s3_bucket_versioning" "versioning_example" {
